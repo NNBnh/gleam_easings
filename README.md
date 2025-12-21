@@ -26,6 +26,6 @@ Further documentation can be found at <https://hexdocs.pm/easings_gleam>.
 ## Development
 
 ```sh
-gleam run   # Run the project
 gleam test  # Run the tests
+gleam run -m birdie # Update test snapshots
 ```
