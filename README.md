@@ -1,5 +1,7 @@
 # easings_gleam
 
+Easing functions for animation in pure Gleam.
+
 [![Package Version](https://img.shields.io/hexpm/v/easings_gleam)](https://hex.pm/packages/easings_gleam)
 [![Hex Docs](https://img.shields.io/badge/hex-docs-ffaff3)](https://hexdocs.pm/easings_gleam/)
 
@@ -7,10 +9,15 @@
 gleam add easings_gleam@1
 ```
 ```gleam
-import easings_gleam
+import easings
 
 pub fn main() -> Nil {
-  // TODO: An example of the project in use
+  // Compute the easing for bounce-in halfway-through the transition
+  0.5
+  |> easings.bounce_in()
+  |> echo
+
+  Nil
 }
 ```
 
