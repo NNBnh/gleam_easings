@@ -1,16 +1,8 @@
 name = "easings_gleam"
-version = "1.0.0"
-
-# Fill out these fields if you intend to generate HTML documentation or publish
-# your project to the Hex package manager.
-#
+version = "2.0.0"
 description = "Easing functions for animation in pure Gleam"
 licences = ["MIT"]
 repository = { type = "github", user = "seancribbs", repo = "easings" }
-# links = [{ title = "Website", href = "" }]
-#
-# For a full reference of all the available options, you can have a look at
-# https://gleam.run/writing-gleam/gleam-toml/.
 
 [dependencies]
 gleam_stdlib = ">= 0.44.0 and < 2.0.0"
@@ -19,3 +11,5 @@ gleam_community_maths = ">= 2.0.0 and < 3.0.0"
 [dev-dependencies]
 gleeunit = ">= 1.0.0 and < 2.0.0"
 birdie = ">= 1.5.2 and < 2.0.0"
+vec_dict_ansi = ">= 1.1.0 and < 2.0.0"
+vec = ">= 3.1.0 and < 4.0.0"
