@@ -2,9 +2,6 @@
 //// [Easings.net](https://easings.net).
 
 import gleam/float
-import gleam/list
-import gleam/pair
-import gleam/result
 import gleam_community/maths
 
 /// An Easing function maps a float from 0..1 into a float.
@@ -122,8 +119,7 @@ pub fn bounce(t: Float) -> Float {
   let b = 2.0 *. a
   let c = 2.5 *. a
 
-  let t = 1.0 -. t
-  let t = case t {
+  let x = case 1.0 -. t {
     t if t <. a -> {
       n1 *. t *. t
     }
@@ -135,12 +131,25 @@ pub fn bounce(t: Float) -> Float {
       let t = t -. { 2.25 /. d1 }
       n1 *. t *. t +. 0.9375
     }
-    _ -> {
+    t -> {
       let t = t -. { 2.625 /. d1 }
       n1 *. t *. t +. 0.984375
     }
   }
-  1.0 -. t
+  1.0 -. x
+}
+
+/// Eases in like a spring around the start.
+///
+pub fn spring(t: Float) -> Float {
+  let pi = 3.1415926535897932
+
+  let #(t, s1) = #(1.0 -. t, t)
+  let assert Ok(s2) = float.power(s1, 2.2)
+
+  1.0
+  -. { maths.sin(t *. pi *. { 0.2 +. 2.5 *. t *. t *. t }) *. s2 +. t }
+  *. { 1.0 +. { 1.2 *. s1 } }
 }
 
 /// Inverts an easing output.
@@ -156,39 +165,31 @@ pub fn reverse(fun: Easing) -> Easing {
   fn(t: Float) -> Float { 1.0 -. fun(1.0 -. t) }
 }
 
-/// TODO
+/// TODO docs
 ///
-pub fn in_out(fun ease_in: Easing) -> Easing {
-  uniform([ease_in, ease_in |> reverse])
+pub fn in_out(ease_in fun: Easing) -> Easing {
+  combine(fun, fun |> reverse)
 }
 
-/// TODO Need naming better
+/// TODO docs
 ///
-pub fn uniform(funs: List(Easing)) -> Easing {
-  funs |> list.map(pair.new(1.0, _)) |> concat
+pub fn out_in(ease_in fun: Easing) -> Easing {
+  combine(fun |> reverse, fun)
 }
 
-/// TODO Need naming better
+/// TODO docs
 ///
-pub fn concat(eases: List(#(Float, Easing))) -> Easing {
-  let sum_weight = eases |> list.map(pair.first) |> float.sum
-  let #(_acc, eases) =
-    eases
-    |> list.map_fold(0.0, fn(start, ease) {
-      let #(duration, fun) = ease
-      let duration = duration /. sum_weight
-      #(start +. duration, #(start, duration, fun))
-    })
+pub fn combine(ease_start: Easing, ease_end: Easing) -> Easing {
+  combine_at(ease_start, ease_end, 0.5)
+}
 
+/// TODO docs
+///
+pub fn combine_at(ease_start: Easing, ease_end: Easing, at: Float) -> Easing {
   fn(t: Float) -> Float {
-    eases
-    |> list.find_map(fn(weighted_fun) {
-      case weighted_fun {
-        #(start, duration, fun) if t >=. start && t <. { start +. duration } ->
-          Ok(start +. duration *. fun({ t -. start } *. 1.0 /. duration))
-        _ -> Error(Nil)
-      }
-    })
-    |> result.unwrap(t)
+    case t <. at {
+      True -> ease_start(t /. at) *. at
+      False -> ease_end({ t -. at } /. { 1.0 -. at }) *. { 1.0 -. at } +. at
+    }
   }
 }

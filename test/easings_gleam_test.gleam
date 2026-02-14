@@ -4,11 +4,33 @@ import gleam/dict
 import gleam/float
 import gleam/int
 import gleam/list
+import gleam/regexp
 import gleam/string
 import gleeunit
+import vec/dict/vec2i_dict
 import vec/dict/vec_dict_ansi
 import vec/vec2.{Vec2}
 import vec/vec2f
+import vec/vec2i
+
+const graph_background = ""
+  <> "                                                           \n"
+  <> "                                                           \n"
+  <> "                                                           \n"
+  <> "    1 _ ___________________________________________________\n"
+  <> "      _                                                    \n"
+  <> " 0.75 _                                                    \n"
+  <> "      _                                                    \n"
+  <> "  0.5 _                                                    \n"
+  <> "      _                                                    \n"
+  <> " 0.25 _                                                    \n"
+  <> "      _                                                    \n"
+  <> "    0 _ ___________________________________________________\n"
+  <> "                                                           \n"
+  <> "        |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|\n"
+  <> "        0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1\n"
+  <> "                                                           \n"
+  <> "                                                           \n"
 
 pub fn main() -> Nil {
   gleeunit.main()
@@ -27,15 +49,34 @@ pub fn snapshot_test() {
     #("back", easings.back),
     #("elastic", easings.elastic),
     #("bounce", easings.bounce),
+    #("spring", easings.spring),
   ]
 
   easings
   |> list.each(fn(easing) {
-    let #(name, fun) = easing
+    let #(name, ease_start) = easing
 
-    snapshot_easing(fun, name <> "_in")
-    snapshot_easing(fun |> easings.reverse, name <> "_out")
-    snapshot_easing(fun |> easings.in_out, name <> "_in_out")
+    snapshot_easing(ease_start, name <> "_in")
+    snapshot_easing(ease_start |> easings.reverse, name <> "_out")
+    snapshot_easing(ease_start |> easings.in_out, name <> "_in_out")
+    snapshot_easing(ease_start |> easings.out_in, name <> "_out_in")
+
+    easings
+    |> list.index_map(fn(easing, y) {
+      let #(_name, ease_end) = easing
+      let ease_end = ease_end |> easings.reverse
+      [0.25, 0.5, 0.75]
+      |> list.index_map(fn(at, x) {
+        #(
+          Vec2(x, y),
+          easings.combine_at(ease_start, ease_end, at) |> steps |> graph,
+        )
+      })
+    })
+    |> list.flatten
+    |> dict.from_list
+    |> vec_dict_ansi.custom(vec2i.zero, Vec2(2, list.length(easings) - 1))
+    |> birdie.snap(name <> "_combine")
   })
 }
 
@@ -57,6 +98,8 @@ fn steps(fun: easings.Easing) -> List(#(Float, Float)) {
 }
 
 fn graph(steps: List(#(Float, Float))) -> String {
+  let assert Ok(re) = regexp.from_string("\\s+\n")
+
   steps
   |> list.map(fn(step) {
     let vec =
@@ -67,7 +110,14 @@ fn graph(steps: List(#(Float, Float))) -> String {
     #(vec, -1)
   })
   |> dict.from_list
+  |> vec2i_dict.translate(Vec2(0, -1))
   |> vec_dict_ansi.brailles(Vec2(0, 16), Vec2(100, -48))
+  |> vec2i_dict.from_string
+  |> vec2i_dict.translate(Vec2(8, 0))
+  |> dict.merge(vec2i_dict.from_string(graph_background), _)
+  |> vec_dict_ansi.custom(vec2i.zero, Vec2(58, 16))
+  |> regexp.replace(re, _, "\n")
+  |> string.trim_end
 }
 
 fn list_steps(steps: List(#(Float, Float))) -> String {
