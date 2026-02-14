@@ -11,13 +11,43 @@ pub type Easing =
 
 /// Linear easing is an identity transformation, time is not skewed.
 ///
+/// ```
+///     1 _ _________________________________________________⢀⡀
+///       _                                            ⣀⣀⠤⠔⠒⠉⠁
+///  0.75 _                                      ⣀⡠⠤⠒⠊⠉
+///       _                               ⢀⣀⡠⠤⠒⠊⠉
+///   0.5 _                         ⢀⣀⠤⠔⠒⠉⠁
+///       _                   ⣀⣀⠤⠔⠒⠉⠁
+///  0.25 _             ⣀⡠⠤⠒⠊⠉
+///       _      ⢀⣀⡠⠤⠒⠊⠉
+///     0 _ ⣀⠤⠔⠒⠉⠁_____________________________________________
+///
+///         |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|
+///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
+/// ```
+///
 pub fn linear(t: Float) -> Float {
   t
 }
 
 /// Eases in quadratically.
 ///
-/// See [more info](https://easings.net/#easeInQuad).
+/// ```
+///     1 _ __________________________________________________⡀
+///       _                                               ⢀⡠⠔⠉
+///  0.75 _                                            ⣀⠤⠒⠁
+///       _                                        ⢀⡠⠒⠉
+///   0.5 _                                    ⣀⠤⠒⠊⠁
+///       _                               ⣀⡠⠔⠒⠉
+///  0.25 _                         ⢀⣀⠤⠔⠒⠉
+///       _                  ⣀⣀⠤⠤⠒⠒⠉⠁
+///     0 _ ⣀⣀⣀⣀⣀⣀⡠⠤⠤⠤⠤⠒⠒⠒⠉⠉⠉__________________________________
+///
+///         |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|
+///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
+/// ```
+///
+/// See more info on [Easings.net](https://easings.net/#easeInQuad).
 ///
 pub fn quadratic(t: Float) -> Float {
   t *. t
@@ -25,7 +55,22 @@ pub fn quadratic(t: Float) -> Float {
 
 /// Eases in cubically.
 ///
-/// See [more info](https://easings.net/#easeInCubic).
+/// ```
+///     1 _ __________________________________________________⡀
+///       _                                                 ⡠⠊
+///  0.75 _                                              ⢀⠔⠉
+///       _                                           ⢀⡠⠊⠁
+///   0.5 _                                        ⢀⡠⠒⠁
+///       _                                     ⣀⠔⠊⠁
+///  0.25 _                                ⣀⡠⠔⠊⠉
+///       _                         ⣀⣀⡠⠤⠒⠊⠉
+///     0 _ ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⡠⠤⠤⠤⠤⠤⠔⠒⠒⠊⠉⠉___________________________
+///
+///         |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|
+///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
+/// ```
+///
+/// See more info on [Easings.net](https://easings.net/#easeInCubic).
 ///
 pub fn cubic(t: Float) -> Float {
   t *. t *. t
@@ -33,7 +78,10 @@ pub fn cubic(t: Float) -> Float {
 
 /// Eases in quartically.
 ///
-/// See [more info](https://easings.net/#easeInQuart).
+/// ```
+/// ```
+///
+/// See more info on [Easings.net](https://easings.net/#easeInQuart).
 ///
 pub fn quartic(t: Float) -> Float {
   t *. t *. t *. t
@@ -41,7 +89,22 @@ pub fn quartic(t: Float) -> Float {
 
 /// Eases in quintically.
 ///
-/// See [more info](https://easings.net/#easeInQuint).
+/// ```
+///     1 _ __________________________________________________⡀
+///       _                                                  ⠔
+///  0.75 _                                                ⠠⠊
+///       _                                              ⢀⠔⠁
+///   0.5 _                                            ⢀⠔⠁
+///       _                                          ⡠⠔⠁
+///  0.25 _                                      ⢀⡠⠔⠊
+///       _                                 ⢀⣀⠤⠔⠊⠁
+///     0 _ ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⠤⠤⠤⠤⠤⠔⠒⠒⠊⠉⠁__________________
+///
+///         |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|
+///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
+/// ```
+///
+/// See more info on [Easings.net](https://easings.net/#easeInQuint).
 ///
 pub fn quintic(t: Float) -> Float {
   t *. t *. t *. t *. t
@@ -49,7 +112,22 @@ pub fn quintic(t: Float) -> Float {
 
 /// Eases in with a sine function.
 ///
-/// See [more info](https://easings.net/#easeInSine).
+/// ```
+///     1 _ __________________________________________________⡀
+///       _                                               ⣀⠤⠒⠉
+///  0.75 _                                          ⢀⡠⠔⠒⠉
+///       _                                      ⢀⡠⠔⠊⠁
+///   0.5 _                                  ⣀⠤⠔⠊⠁
+///       _                             ⣀⡠⠔⠒⠉
+///  0.25 _                       ⢀⣀⠤⠔⠒⠉
+///       _                ⢀⣀⡠⠤⠒⠒⠉⠁
+///     0 _ ⣀⣀⣀⣀⣀⣀⠤⠤⠤⠤⠒⠒⠒⠉⠉⠁___________________________________
+///
+///         |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|
+///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
+/// ```
+///
+/// See more info on [Easings.net](https://easings.net/#easeInSine).
 ///
 pub fn sine(t: Float) -> Float {
   let half_pi = 1.5707963267948966
@@ -59,7 +137,22 @@ pub fn sine(t: Float) -> Float {
 
 /// Eases in exponentially.
 ///
-/// See [more info](https://easings.net/#easeInExpo).
+/// ```
+///     1 _ __________________________________________________⡀
+///       _                                                  ⡐
+///  0.75 _                                                 ⡐
+///       _                                               ⢀⠌
+///   0.5 _                                              ⡠⠂
+///       _                                            ⡠⠊
+///  0.25 _                                         ⡠⠔⠉
+///       _                                   ⢀⣀⠤⠔⠒⠉
+///     0 _ ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⠤⠤⠤⠤⠤⠤⠤⠤⠒⠒⠒⠒⠉⠉⠁________________
+///
+///         |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|
+///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
+/// ```
+///
+/// See more info on [Easings.net](https://easings.net/#easeInExpo).
 ///
 pub fn exponential(t: Float) -> Float {
   case t {
@@ -73,7 +166,22 @@ pub fn exponential(t: Float) -> Float {
 
 /// Eases in on an elliptic arc.
 ///
-/// See [more info](https://easings.net/#easeInCirc).
+/// ```
+///     1 _ __________________________________________________⡀
+///       _
+///  0.75 _                                                 ⢀⠊
+///       _                                               ⢀⠔⠁
+///   0.5 _                                            ⣀⠤⠊⠁
+///       _                                       ⢀⣀⠤⠒⠉
+///  0.25 _                                 ⢀⣀⠤⠤⠒⠊⠁
+///       _                        ⣀⣀⣀⠤⠤⠔⠒⠊⠉⠁
+///     0 _ ⣀⣀⣀⣀⣀⣀⣀⣀⣀⠤⠤⠤⠤⠤⠤⠔⠒⠒⠒⠊⠉⠉⠉____________________________
+///
+///         |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|
+///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
+/// ```
+///
+/// See more info on [Easings.net](https://easings.net/#easeInCirc).
 ///
 pub fn circular(t: Float) -> Float {
   let assert Ok(x) = float.square_root(1.0 -. t *. t)
@@ -82,7 +190,7 @@ pub fn circular(t: Float) -> Float {
 
 /// Eases away from the goal before accelerating toward it.
 ///
-/// See [more info](https://easings.net/#easeInBack).
+/// See more info on [Easings.net](https://easings.net/#easeInBack).
 ///
 pub fn back(t: Float) -> Float {
   let c1 = 1.70158
@@ -93,7 +201,22 @@ pub fn back(t: Float) -> Float {
 
 /// Eases by oscillating with increasing amplitude around the start.
 ///
-/// See [more info](https://easings.net/#easeInElastic).
+/// ```
+///     1 _ __________________________________________________⡀
+///       _                                                  ⠠
+///  0.75 _                                                  ⠄
+///       _                                                 ⠠
+///   0.5 _                                                 ⡀
+///       _
+///  0.25 _                                                ⠈
+///       _                                   ⢀⣀⣀⡀         ⠁
+///     0 _ ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⠤⢄⣀⣀⣀______⣀⠤⠊⠁__⠈⠢_______⠐____
+///                                  ⠉⠉⠉⠉⠉⠉        ⠑⡀     ⠂
+///         |''''|''''|''''|''''|''''|''''|''''|''''⠐⠄'''⡈''''|
+///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8⠢⣀0.9   1
+/// ```
+///
+/// See more info on [Easings.net](https://easings.net/#easeInElastic).
 ///
 pub fn elastic(t: Float) -> Float {
   let c4 = 2.0943951
@@ -110,7 +233,22 @@ pub fn elastic(t: Float) -> Float {
 
 /// Eases in by "bouncing" around the start.
 ///
-/// See [more info](https://easings.net/#easeInBounce).
+/// ```
+///     1 _ ________________________________________________⣀⣀⡀
+///       _                                            ⢀⠤⠒⠊⠉
+///  0.75 _                                          ⡠⠊⠁
+///       _                                        ⡠⠊
+///   0.5 _                                      ⡠⠊
+///       _                                    ⢀⠔
+///  0.25 _                     ⢀⣀⣀⣀⣀⡀        ⠠⠂
+///       _                 ⣀⠤⠒⠉⠁    ⠈⠉⠒⠤⣀   ⡐⠁
+///     0 _ ⣀⣀⣀⣀⣀⡠⠤⠒⠒⠒⠒⠢⠤⢄⠤⠊______________⠑⠤⠔__________________
+///
+///         |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|
+///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
+/// ```
+///
+/// See more info on [Easings.net](https://easings.net/#easeInBounce).
 ///
 pub fn bounce(t: Float) -> Float {
   let n1 = 7.5625
@@ -141,6 +279,21 @@ pub fn bounce(t: Float) -> Float {
 
 /// Eases in like a spring around the start.
 ///
+/// ```
+///     1 _ __________________________________________________⡀
+///       _                                                 ⡠⠊
+///  0.75 _                                               ⡠⠊
+///       _                                             ⡠⠊
+///   0.5 _                                          ⣀⠔⠉
+///       _                                       ⢀⠤⠊
+///  0.25 _                                    ⣀⠤⠊⠁
+///       _                                ⢀⡠⠔⠊
+///     0 _ ⣀⣀⣀⣀⣀⣀⣀⣀⠤⠤⠤⠤⢄⣀⣀____________⣀⡠⠔⠊⠁___________________
+///                        ⠉⠉⠒⠒⠢⠤⠤⠤⠒⠒⠊⠉
+///         |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|
+///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
+/// ```
+///
 pub fn spring(t: Float) -> Float {
   let pi = 3.1415926535897932
 
@@ -159,7 +312,7 @@ pub fn reverse(fun: Easing) -> Easing {
   fn(t: Float) -> Float { 1.0 -. fun(1.0 -. t) }
 }
 
-/// TODO docs
+/// TODO docs (and even better name)
 ///
 pub fn in_out(fun: Easing) -> Easing {
   combine(fun, fun |> reverse)
