@@ -152,12 +152,6 @@ pub fn spring(t: Float) -> Float {
   *. { 1.0 +. { 1.2 *. s1 } }
 }
 
-/// Inverts an easing output.
-///
-pub fn negate(t: Float) -> Float {
-  1.0 -. t
-}
-
 /// Inverts an easing function, so ease-in becomes ease-out and ease-out
 /// becomes ease-in.
 ///
@@ -167,14 +161,8 @@ pub fn reverse(fun: Easing) -> Easing {
 
 /// TODO docs
 ///
-pub fn in_out(ease_in fun: Easing) -> Easing {
+pub fn in_out(fun: Easing) -> Easing {
   combine(fun, fun |> reverse)
-}
-
-/// TODO docs
-///
-pub fn out_in(ease_in fun: Easing) -> Easing {
-  combine(fun |> reverse, fun)
 }
 
 /// TODO docs

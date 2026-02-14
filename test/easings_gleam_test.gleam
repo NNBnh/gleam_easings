@@ -4,7 +4,6 @@ import gleam/dict
 import gleam/float
 import gleam/int
 import gleam/list
-import gleam/regexp
 import gleam/string
 import gleeunit
 import vec/dict/vec2i_dict
@@ -29,7 +28,6 @@ const graph_background = ""
   <> "                                                           \n"
   <> "        |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|\n"
   <> "        0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1\n"
-  <> "                                                           \n"
   <> "                                                           \n"
 
 pub fn main() -> Nil {
@@ -59,7 +57,10 @@ pub fn snapshot_test() {
     snapshot_easing(ease_start, name <> "_in")
     snapshot_easing(ease_start |> easings.reverse, name <> "_out")
     snapshot_easing(ease_start |> easings.in_out, name <> "_in_out")
-    snapshot_easing(ease_start |> easings.out_in, name <> "_out_in")
+    snapshot_easing(
+      ease_start |> easings.reverse |> easings.in_out,
+      name <> "_out_in",
+    )
 
     easings
     |> list.index_map(fn(easing, y) {
@@ -98,8 +99,6 @@ fn steps(fun: easings.Easing) -> List(#(Float, Float)) {
 }
 
 fn graph(steps: List(#(Float, Float))) -> String {
-  let assert Ok(re) = regexp.from_string("\\s+\n")
-
   steps
   |> list.map(fn(step) {
     let vec =
@@ -115,9 +114,7 @@ fn graph(steps: List(#(Float, Float))) -> String {
   |> vec2i_dict.from_string
   |> vec2i_dict.translate(Vec2(8, 0))
   |> dict.merge(vec2i_dict.from_string(graph_background), _)
-  |> vec_dict_ansi.custom(vec2i.zero, Vec2(58, 16))
-  |> regexp.replace(re, _, "\n")
-  |> string.trim_end
+  |> vec_dict_ansi.custom(vec2i.zero, Vec2(58, 15))
 }
 
 fn list_steps(steps: List(#(Float, Float))) -> String {
