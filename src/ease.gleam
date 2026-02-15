@@ -1,5 +1,20 @@
 //// Easing functions for more natural animation transitions, derived from
 //// [Easings.net](https://easings.net).
+////
+//// <style>
+////   @font-face {
+////     font-family: "Iosevka";
+////     font-style: normal;
+////     font-display: swap;
+////     font-weight: 400;
+////     src: url(https://cdn.jsdelivr.net/fontsource/fonts/iosevka@latest/latin-400-normal.woff2) format('woff2'), url(https://cdn.jsdelivr.net/fontsource/fonts/iosevka@latest/latin-400-normal.woff) format('woff');
+////   }
+////
+////   .language-ansi {
+////     font-family: "Iosevka", "monospace";
+////     line-height: 1.0;
+////   }
+//// </style>
 
 import gleam/float
 import gleam_community/maths
@@ -11,7 +26,7 @@ pub type Easing =
 
 /// Linear easing is an identity transformation, time is not skewed.
 ///
-/// ```
+/// ```ansi
 ///     1 _ _________________________________________________⢀⡀
 ///       _                                            ⣀⣀⠤⠔⠒⠉⠁
 ///  0.75 _                                      ⣀⡠⠤⠒⠊⠉
@@ -32,7 +47,7 @@ pub fn linear(t: Float) -> Float {
 
 /// Eases in quadratically.
 ///
-/// ```
+/// ```ansi
 ///     1 _ __________________________________________________⡀
 ///       _                                               ⢀⡠⠔⠉
 ///  0.75 _                                            ⣀⠤⠒⠁
@@ -55,7 +70,7 @@ pub fn quadratic(t: Float) -> Float {
 
 /// Eases in cubically.
 ///
-/// ```
+/// ```ansi
 ///     1 _ __________________________________________________⡀
 ///       _                                                 ⡠⠊
 ///  0.75 _                                              ⢀⠔⠉
@@ -78,7 +93,19 @@ pub fn cubic(t: Float) -> Float {
 
 /// Eases in quartically.
 ///
-/// ```
+/// ```ansi
+///     1 _ __________________________________________________⡀
+///       _                                                 ⢀⠊
+///  0.75 _                                               ⢀⠔⠁
+///       _                                             ⢀⠔⠁
+///   0.5 _                                           ⡠⠒⠁
+///       _                                        ⣀⠔⠊
+///  0.25 _                                    ⣀⠤⠒⠉
+///       _                              ⣀⣀⠤⠔⠒⠉
+///     0 _ ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⠤⠤⠤⠤⠤⠔⠒⠒⠊⠉⠉______________________
+///
+///         |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|
+///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
 /// ```
 ///
 /// See more info on [Easings.net](https://easings.net/#easeInQuart).
@@ -89,7 +116,7 @@ pub fn quartic(t: Float) -> Float {
 
 /// Eases in quintically.
 ///
-/// ```
+/// ```ansi
 ///     1 _ __________________________________________________⡀
 ///       _                                                  ⠔
 ///  0.75 _                                                ⠠⠊
@@ -112,7 +139,7 @@ pub fn quintic(t: Float) -> Float {
 
 /// Eases in with a sine function.
 ///
-/// ```
+/// ```ansi
 ///     1 _ __________________________________________________⡀
 ///       _                                               ⣀⠤⠒⠉
 ///  0.75 _                                          ⢀⡠⠔⠒⠉
@@ -137,7 +164,7 @@ pub fn sine(t: Float) -> Float {
 
 /// Eases in exponentially.
 ///
-/// ```
+/// ```ansi
 ///     1 _ __________________________________________________⡀
 ///       _                                                  ⡐
 ///  0.75 _                                                 ⡐
@@ -166,7 +193,7 @@ pub fn exponential(t: Float) -> Float {
 
 /// Eases in on an elliptic arc.
 ///
-/// ```
+/// ```ansi
 ///     1 _ __________________________________________________⡀
 ///       _
 ///  0.75 _                                                 ⢀⠊
@@ -201,7 +228,7 @@ pub fn back(t: Float) -> Float {
 
 /// Eases by oscillating with increasing amplitude around the start.
 ///
-/// ```
+/// ```ansi
 ///     1 _ __________________________________________________⡀
 ///       _                                                  ⠠
 ///  0.75 _                                                  ⠄
@@ -233,7 +260,7 @@ pub fn elastic(t: Float) -> Float {
 
 /// Eases in by "bouncing" around the start.
 ///
-/// ```
+/// ```ansi
 ///     1 _ ________________________________________________⣀⣀⡀
 ///       _                                            ⢀⠤⠒⠊⠉
 ///  0.75 _                                          ⡠⠊⠁
@@ -279,7 +306,7 @@ pub fn bounce(t: Float) -> Float {
 
 /// Eases in like a spring around the start.
 ///
-/// ```
+/// ```ansi
 ///     1 _ __________________________________________________⡀
 ///       _                                                 ⡠⠊
 ///  0.75 _                                               ⡠⠊

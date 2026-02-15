@@ -1,5 +1,5 @@
 import birdie
-import easings
+import ease
 import gleam/dict
 import gleam/float
 import gleam/int
@@ -36,18 +36,18 @@ pub fn main() -> Nil {
 
 pub fn snapshot_test() {
   let easings = [
-    #("linear", easings.linear),
-    #("quadratic", easings.quadratic),
-    #("cubic", easings.cubic),
-    #("quartic", easings.quartic),
-    #("quintic", easings.quintic),
-    #("sine", easings.sine),
-    #("exponential", easings.exponential),
-    #("circular", easings.circular),
-    #("back", easings.back),
-    #("elastic", easings.elastic),
-    #("bounce", easings.bounce),
-    #("spring", easings.spring),
+    #("linear", ease.linear),
+    #("quadratic", ease.quadratic),
+    #("cubic", ease.cubic),
+    #("quartic", ease.quartic),
+    #("quintic", ease.quintic),
+    #("sine", ease.sine),
+    #("exponential", ease.exponential),
+    #("circular", ease.circular),
+    #("back", ease.back),
+    #("elastic", ease.elastic),
+    #("bounce", ease.bounce),
+    #("spring", ease.spring),
   ]
 
   easings
@@ -55,22 +55,22 @@ pub fn snapshot_test() {
     let #(name, ease_start) = easing
 
     snapshot_easing(ease_start, name <> "_in")
-    snapshot_easing(ease_start |> easings.reverse, name <> "_out")
-    snapshot_easing(ease_start |> easings.in_out, name <> "_in_out")
+    snapshot_easing(ease_start |> ease.reverse, name <> "_out")
+    snapshot_easing(ease_start |> ease.in_out, name <> "_in_out")
     snapshot_easing(
-      ease_start |> easings.reverse |> easings.in_out,
+      ease_start |> ease.reverse |> ease.in_out,
       name <> "_out_in",
     )
 
     easings
     |> list.index_map(fn(easing, y) {
       let #(_name, ease_end) = easing
-      let ease_end = ease_end |> easings.reverse
+      let ease_end = ease_end |> ease.reverse
       [0.25, 0.5, 0.75]
       |> list.index_map(fn(at, x) {
         #(
           Vec2(x, y),
-          easings.combine_at(ease_start, ease_end, at) |> steps |> graph,
+          ease.combine_at(ease_start, ease_end, at) |> steps |> graph,
         )
       })
     })
@@ -81,13 +81,13 @@ pub fn snapshot_test() {
   })
 }
 
-fn snapshot_easing(fun: easings.Easing, title: String) -> Nil {
+fn snapshot_easing(fun: ease.Easing, title: String) -> Nil {
   let steps = fun |> steps
 
   { graph(steps) <> "\n" <> list_steps(steps) } |> birdie.snap(title)
 }
 
-fn steps(fun: easings.Easing) -> List(#(Float, Float)) {
+fn steps(fun: ease.Easing) -> List(#(Float, Float)) {
   int.range(0, 101, [], fn(steps, step) {
     let t =
       step |> int.to_float |> float.multiply(0.01) |> float.to_precision(2)
