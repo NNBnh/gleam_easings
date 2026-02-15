@@ -56,9 +56,9 @@ pub fn snapshot_test() {
 
     snapshot_easing(ease_start, name <> "_in")
     snapshot_easing(ease_start |> ease.reverse, name <> "_out")
-    snapshot_easing(ease_start |> ease.in_out, name <> "_in_out")
+    snapshot_easing(ease_start |> ease.symmetry, name <> "_in_out")
     snapshot_easing(
-      ease_start |> ease.reverse |> ease.in_out,
+      ease_start |> ease.reverse |> ease.symmetry,
       name <> "_out_in",
     )
 
@@ -68,16 +68,13 @@ pub fn snapshot_test() {
       let ease_end = ease_end |> ease.reverse
       [0.25, 0.5, 0.75]
       |> list.index_map(fn(at, x) {
-        #(
-          Vec2(x, y),
-          ease.combine_at(ease_start, ease_end, at) |> steps |> graph,
-        )
+        #(Vec2(x, y), ease.join_at(ease_start, ease_end, at) |> steps |> graph)
       })
     })
     |> list.flatten
     |> dict.from_list
     |> vec_dict_ansi.custom(vec2i.zero, Vec2(2, list.length(easings) - 1))
-    |> birdie.snap(name <> "_combine")
+    |> birdie.snap(name <> "_joins")
   })
 }
 

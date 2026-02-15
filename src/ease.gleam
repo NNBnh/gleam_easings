@@ -269,7 +269,7 @@ pub fn elastic(t: Float) -> Float {
 ///       _                                    ⢀⠔
 ///  0.25 _                     ⢀⣀⣀⣀⣀⡀        ⠠⠂
 ///       _                 ⣀⠤⠒⠉⠁    ⠈⠉⠒⠤⣀   ⡐⠁
-///     0 _ ⣀⣀⣀⣀⣀⡠⠤⠒⠒⠒⠒⠢⠤⢄⠤⠊______________⠑⠤⠔__________________
+///     0 _ ⣀⣀⣀⣀⣀⡠⠤⠒⠒⠒⠒⠢⠤⢄⠤⠊______________⠑⢄⠔__________________
 ///
 ///         |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|
 ///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
@@ -335,25 +335,140 @@ pub fn spring(t: Float) -> Float {
 /// Inverts an easing function, so ease-in becomes ease-out and ease-out
 /// becomes ease-in.
 ///
+/// ## Examples
+///
+/// ```gleam
+/// quartic |> reverse
+/// ```
+///
+/// Output functions graph:
+///
+/// ```ansi
+///     1 _ ________________________________⢀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⡀
+///       _                    ⢀⣀⡠⠤⠤⠒⠒⠒⠉⠉⠉⠉⠉⠁
+///  0.75 _               ⢀⡠⠔⠒⠉⠁
+///       _           ⢀⡠⠔⠊⠁
+///   0.5 _         ⡠⠒⠁
+///       _      ⢀⠔⠊
+///  0.25 _    ⢀⠔⠁
+///       _  ⢀⠔⠁
+///     0 _ ⡠⠂_________________________________________________
+///
+///         |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|
+///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
+/// ```
+///
 pub fn reverse(fun: Easing) -> Easing {
   fn(t: Float) -> Float { 1.0 -. fun(1.0 -. t) }
 }
 
-/// TODO docs (and even better name)
+/// Making an easing function symmetry by joining it to its reversed self, so
+/// ease-in becomes ease-in-out and ease-out becomes ease-out-in.
 ///
-pub fn in_out(fun: Easing) -> Easing {
-  combine(fun, fun |> reverse)
+/// ## Examples
+///
+/// ```gleam
+/// quartic |> symmetry
+/// ```
+///
+/// Output functions graph:
+///
+/// ```ansi
+///     1 _ _______________________________________⢀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⡀
+///       _                                 ⣀⠤⠔⠒⠊⠉⠉⠁
+///  0.75 _                              ⡠⠔⠉
+///       _                           ⢀⠔⠊
+///   0.5 _                          ⡠⠂
+///       _                        ⢀⠊
+///  0.25 _                      ⡠⠒⠁
+///       _                  ⢀⡠⠔⠉
+///     0 _ ⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⠤⠤⠤⠒⠒⠉⠁_________________________________
+///
+///         |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|
+///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
+/// ```
+///
+/// ```gleam
+/// quartic |> reverse |> symmetry
+/// ```
+///
+/// Output functions graph:
+///
+/// ```ansi
+///     1 _ __________________________________________________⡀
+///       _                                                 ⢀⠊
+///  0.75 _                                               ⡠⠒⠁
+///       _                                           ⢀⡠⠔⠉
+///   0.5 _               ⢀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⠤⠤⠤⠒⠒⠉⠁
+///       _        ⣀⠤⠔⠒⠊⠉⠉⠁
+///  0.25 _     ⡠⠔⠉
+///       _  ⢀⠔⠊
+///     0 _ ⡠⠂_________________________________________________
+///
+///         |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|
+///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
+/// ```
+///
+pub fn symmetry(fun: Easing) -> Easing {
+  join(fun, fun |> reverse)
 }
 
-/// TODO docs
+/// Join two easing functions.
 ///
-pub fn combine(ease_start: Easing, ease_end: Easing) -> Easing {
-  combine_at(ease_start, ease_end, 0.5)
+/// ## Examples
+///
+/// ```gleam
+/// join(back, elastic |> reverse)
+/// ```
+///
+/// Output functions graph:
+///
+/// ```ansi
+///                                    ⢀⠒⢄
+///     1 _ ___________________________⠄__⢂___⣀⠤⠤⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⡀
+///       _                           ⠠    ⠑⠒⠊
+///  0.75 _                           ⡀
+///       _
+///   0.5 _                          ⡈
+///       _                        ⢀⠌
+///  0.25 _                       ⡠⠁
+///       _                    ⢀⠔⠊
+///     0 _ ⣀⣀⣀⣀___________⣀⡠⠤⠊⠁_______________________________
+///             ⠉⠉⠉⠉⠉⠒⠒⠒⠉⠉⠉
+///         |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|
+///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
+/// ```
+///
+pub fn join(ease_start: Easing, ease_end: Easing) -> Easing {
+  join_at(ease_start, ease_end, 0.5)
 }
 
-/// TODO docs
+/// Join two easing functions at a given point.
 ///
-pub fn combine_at(ease_start: Easing, ease_end: Easing, at: Float) -> Easing {
+/// ## Examples
+///
+/// ```gleam
+/// join(linear, bounce |> reverse, 0.25)
+/// ```
+///
+/// Output functions graph:
+///
+/// ```ansi
+///     1 _ __________________________⡀____________⢀⡀_____⣀⣀⣀⣀⡀
+///       _                          ⡐⠈⠑⠤⣀      ⢀⡠⠔⠁⠈⠉⠉⠉⠉⠉
+///  0.75 _                        ⢀⠌     ⠉⠒⠒⠒⠒⠉⠁
+///       _                       ⡠⠂
+///   0.5 _                     ⢀⠔
+///       _                   ⡠⠔⠁
+///  0.25 _             ⣀⣀⡠⠤⠒⠉
+///       _      ⢀⣀⡠⠤⠒⠊⠉
+///     0 _ ⣀⠤⠔⠒⠉⠁_____________________________________________
+///
+///         |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|
+///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
+/// ```
+///
+pub fn join_at(ease_start: Easing, ease_end: Easing, at: Float) -> Easing {
   fn(t: Float) -> Float {
     case t <. at {
       True -> ease_start(t /. at) *. at
