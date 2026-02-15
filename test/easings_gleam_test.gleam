@@ -78,13 +78,13 @@ pub fn snapshot_test() {
   })
 }
 
-fn snapshot_easing(fun: ease.Easing, title: String) -> Nil {
+fn snapshot_easing(fun: fn(Float) -> Float, title: String) -> Nil {
   let steps = fun |> steps
 
   { graph(steps) <> "\n" <> list_steps(steps) } |> birdie.snap(title)
 }
 
-fn steps(fun: ease.Easing) -> List(#(Float, Float)) {
+fn steps(fun: fn(Float) -> Float) -> List(#(Float, Float)) {
   int.range(0, 101, [], fn(steps, step) {
     let t =
       step |> int.to_float |> float.multiply(0.01) |> float.to_precision(2)
