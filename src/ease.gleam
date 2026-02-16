@@ -19,6 +19,11 @@
 import gleam/float
 import gleam_community/maths
 
+/// An easing function maps a float from 0..1 into a float.
+///
+pub type Ease =
+  fn(Float) -> Float
+
 /// Linear easing is an identity transformation, time is not skewed.
 ///
 /// ```ansi
@@ -353,8 +358,8 @@ pub fn spring(t: Float) -> Float {
 ///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
 /// ```
 ///
-pub fn reverse(fun: fn(Float) -> Float) -> fn(Float) -> Float {
-  fn(t: Float) -> Float { 1.0 -. fun(1.0 -. t) }
+pub fn reverse(ease: Ease) -> Ease {
+  fn(t: Float) -> Float { 1.0 -. ease(1.0 -. t) }
 }
 
 /// Making an easing function symmetry by joining it to its reversed self, so
@@ -404,8 +409,8 @@ pub fn reverse(fun: fn(Float) -> Float) -> fn(Float) -> Float {
 ///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
 /// ```
 ///
-pub fn symmetry(fun: fn(Float) -> Float) -> fn(Float) -> Float {
-  join(fun, fun |> reverse)
+pub fn symmetry(ease: Ease) -> Ease {
+  join(ease, ease |> reverse)
 }
 
 /// Join two easing functions.
@@ -434,10 +439,7 @@ pub fn symmetry(fun: fn(Float) -> Float) -> fn(Float) -> Float {
 ///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
 /// ```
 ///
-pub fn join(
-  ease_start: fn(Float) -> Float,
-  ease_end: fn(Float) -> Float,
-) -> fn(Float) -> Float {
+pub fn join(ease_start: Ease, ease_end: Ease) -> Ease {
   join_at(ease_start, ease_end, 0.5)
 }
 
@@ -466,11 +468,7 @@ pub fn join(
 ///         0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1
 /// ```
 ///
-pub fn join_at(
-  ease_start: fn(Float) -> Float,
-  ease_end: fn(Float) -> Float,
-  at: Float,
-) -> fn(Float) -> Float {
+pub fn join_at(ease_start: Ease, ease_end: Ease, at: Float) -> Ease {
   fn(t: Float) -> Float {
     case t <. at {
       True -> ease_start(t /. at) *. at
