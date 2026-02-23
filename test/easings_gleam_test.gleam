@@ -1,156 +1,126 @@
 import birdie
-import easings
+import ease
+import gleam/dict
 import gleam/float
 import gleam/int
 import gleam/list
 import gleam/string
 import gleeunit
+import vec/dict/vec2i_dict
+import vec/dict/vec_dict_ansi
+import vec/vec2.{Vec2}
+import vec/vec2f
+import vec/vec2i
+
+const graph_background = ""
+  <> "                                                           \n"
+  <> "                                                           \n"
+  <> "                                                           \n"
+  <> "    1 _ ___________________________________________________\n"
+  <> "      _                                                    \n"
+  <> " 0.75 _                                                    \n"
+  <> "      _                                                    \n"
+  <> "  0.5 _                                                    \n"
+  <> "      _                                                    \n"
+  <> " 0.25 _                                                    \n"
+  <> "      _                                                    \n"
+  <> "    0 _ ___________________________________________________\n"
+  <> "                                                           \n"
+  <> "        |''''|''''|''''|''''|''''|''''|''''|''''|''''|''''|\n"
+  <> "        0   0.1  0.2  0.3  0.4  0.5  0.6  0.7  0.8  0.9   1\n"
+  <> "                                                           \n"
 
 pub fn main() -> Nil {
   gleeunit.main()
 }
 
-const steps = 35
+pub fn snapshot_test() {
+  let easings = [
+    #("linear", ease.linear),
+    #("quadratic", ease.quadratic),
+    #("cubic", ease.cubic),
+    #("quartic", ease.quartic),
+    #("quintic", ease.quintic),
+    #("sine", ease.sine),
+    #("exponential", ease.exponential),
+    #("circular", ease.circular),
+    #("back", ease.back),
+    #("elastic", ease.elastic),
+    #("bounce", ease.bounce),
+    #("spring", ease.spring),
+  ]
 
-const precision = 8
+  easings
+  |> list.each(fn(easing) {
+    let #(name, ease_start) = easing
 
-pub fn linear_test() {
-  easings.linear |> snapshot_easing("Linear")
+    snapshot_easing(ease_start, name <> "_in")
+    snapshot_easing(ease_start |> ease.reverse, name <> "_out")
+    snapshot_easing(ease_start |> ease.symmetry, name <> "_in_out")
+    snapshot_easing(
+      ease_start |> ease.reverse |> ease.symmetry,
+      name <> "_out_in",
+    )
+
+    easings
+    |> list.index_map(fn(easing, y) {
+      let #(_name, ease_end) = easing
+      let ease_end = ease_end |> ease.reverse
+      [0.25, 0.5, 0.75]
+      |> list.index_map(fn(at, x) {
+        #(Vec2(x, y), ease.join_at(ease_start, ease_end, at) |> steps |> graph)
+      })
+    })
+    |> list.flatten
+    |> dict.from_list
+    |> vec_dict_ansi.custom(vec2i.zero, Vec2(2, list.length(easings) - 1))
+    |> birdie.snap(name <> "_joins")
+  })
 }
 
-pub fn quadratic_in_test() {
-  easings.quadratic_in |> snapshot_easing("Quadratic in")
+fn snapshot_easing(fun: fn(Float) -> Float, title: String) -> Nil {
+  let steps = fun |> steps
+
+  { graph(steps) <> "\n" <> list_steps(steps) } |> birdie.snap(title)
 }
 
-pub fn quadratic_out_test() {
-  easings.quadratic_out |> snapshot_easing("Quadratic out")
+fn steps(fun: fn(Float) -> Float) -> List(#(Float, Float)) {
+  int.range(0, 101, [], fn(steps, step) {
+    let t =
+      step |> int.to_float |> float.multiply(0.01) |> float.to_precision(2)
+    let x = fun(t) |> float.to_precision(8)
+
+    [#(t, x), ..steps]
+  })
+  |> list.reverse
 }
 
-pub fn quadratic_in_out_test() {
-  easings.quadratic_in_out |> snapshot_easing("Quadratic in/out")
+fn graph(steps: List(#(Float, Float))) -> String {
+  steps
+  |> list.map(fn(step) {
+    let vec =
+      step
+      |> vec2.from_tuple
+      |> vec2f.multiply(Vec2(100.0, -32.0))
+      |> vec2f.round
+    #(vec, -1)
+  })
+  |> dict.from_list
+  |> vec2i_dict.translate(Vec2(0, -1))
+  |> vec_dict_ansi.brailles(Vec2(0, 16), Vec2(100, -48))
+  |> vec2i_dict.from_string
+  |> vec2i_dict.translate(Vec2(8, 0))
+  |> dict.merge(vec2i_dict.from_string(graph_background), _)
+  |> vec_dict_ansi.custom(vec2i.zero, Vec2(58, 15))
 }
 
-pub fn cubic_in_test() {
-  easings.cubic_in |> snapshot_easing("Cubic in")
-}
-
-pub fn cubic_out_test() {
-  easings.cubic_out |> snapshot_easing("Cubic out")
-}
-
-pub fn cubic_in_out_test() {
-  easings.cubic_in_out |> snapshot_easing("Cubic in/out")
-}
-
-pub fn quartic_in_test() {
-  easings.quartic_in |> snapshot_easing("Quartic in")
-}
-
-pub fn quartic_out_test() {
-  easings.quartic_out |> snapshot_easing("Quartic out")
-}
-
-pub fn quartic_in_out_test() {
-  easings.quartic_in_out |> snapshot_easing("Quartic in/out")
-}
-
-pub fn quintic_in_test() {
-  easings.quintic_in |> snapshot_easing("Quintic in")
-}
-
-pub fn quintic_out_test() {
-  easings.quintic_out |> snapshot_easing("Quintic out")
-}
-
-pub fn quintic_in_out_test() {
-  easings.quintic_in_out |> snapshot_easing("Quintic in/out")
-}
-
-pub fn sine_in_test() {
-  easings.sine_in |> snapshot_easing("Sine in")
-}
-
-pub fn sine_out_test() {
-  easings.sine_out |> snapshot_easing("Sine out")
-}
-
-pub fn sine_in_out_test() {
-  easings.sine_in_out |> snapshot_easing("Sine in/out")
-}
-
-pub fn exponential_in_test() {
-  easings.exponential_in |> snapshot_easing("Exponential in")
-}
-
-pub fn exponential_out_test() {
-  easings.exponential_out |> snapshot_easing("Exponential out")
-}
-
-pub fn exponential_in_out_test() {
-  easings.exponential_in_out |> snapshot_easing("Exponential in/out")
-}
-
-pub fn circular_in_test() {
-  easings.circular_in |> snapshot_easing("Circular in")
-}
-
-pub fn circular_out_test() {
-  easings.circular_out |> snapshot_easing("Circular out")
-}
-
-pub fn circular_in_out_test() {
-  easings.circular_in_out |> snapshot_easing("Circular in/out")
-}
-
-pub fn back_in_test() {
-  easings.back_in |> snapshot_easing("Back in")
-}
-
-pub fn back_out_test() {
-  easings.back_out |> snapshot_easing("Back out")
-}
-
-pub fn back_in_out_test() {
-  easings.back_in_out |> snapshot_easing("Back in/out")
-}
-
-pub fn elastic_in_test() {
-  easings.elastic_in |> snapshot_easing("Elastic in")
-}
-
-pub fn elastic_out_test() {
-  easings.elastic_out |> snapshot_easing("Elastic out")
-}
-
-pub fn elastic_in_out_test() {
-  easings.elastic_in_out |> snapshot_easing("Elastic in/out")
-}
-
-pub fn bounce_in_test() {
-  easings.bounce_in |> snapshot_easing("Bounce in")
-}
-
-pub fn bounce_out_test() {
-  easings.bounce_out |> snapshot_easing("Bounce out")
-}
-
-pub fn bounce_in_out_test() {
-  easings.bounce_in_out |> snapshot_easing("Bounce in/out")
-}
-
-fn snapshot_easing(f: easings.Easing, title: String) -> Nil {
-  f
-  |> compute_steps
-  |> string.inspect
-  |> birdie.snap(title)
-}
-
-fn compute_steps(f: easings.Easing) -> List(#(Float, Float)) {
-  use points, step <- list.fold_right(list.range(0, steps), [])
-  let t =
-    { int.to_float(step) /. int.to_float(steps) }
-    |> float.to_precision(precision)
-  let y = f(t)
-
-  [#(t, float.to_precision(y, precision)), ..points]
+fn list_steps(steps: List(#(Float, Float))) -> String {
+  steps
+  |> list.map(fn(step) {
+    let #(t, x) = step
+    let t = t |> float.to_string |> string.pad_end(4, "0")
+    let x = x |> float.to_string
+    t <> " : " <> x
+  })
+  |> string.join("\n")
 }
