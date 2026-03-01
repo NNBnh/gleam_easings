@@ -27,6 +27,7 @@ pub type Ease =
 /// Linear easing is an identity transformation, time is not skewed.
 ///
 /// ```ansi
+///
 ///     1 _ _________________________________________________⢀⡀
 ///       _                                            ⣀⣀⠤⠔⠒⠉⠁
 ///  0.75 _                                      ⣀⡠⠤⠒⠊⠉
@@ -48,6 +49,7 @@ pub fn linear(t: Float) -> Float {
 /// Eases in quadratically.
 ///
 /// ```ansi
+///
 ///     1 _ __________________________________________________⡀
 ///       _                                               ⢀⡠⠔⠉
 ///  0.75 _                                            ⣀⠤⠒⠁
@@ -71,6 +73,7 @@ pub fn quadratic(t: Float) -> Float {
 /// Eases in cubically.
 ///
 /// ```ansi
+///
 ///     1 _ __________________________________________________⡀
 ///       _                                                 ⡠⠊
 ///  0.75 _                                              ⢀⠔⠉
@@ -94,6 +97,7 @@ pub fn cubic(t: Float) -> Float {
 /// Eases in quartically.
 ///
 /// ```ansi
+///
 ///     1 _ __________________________________________________⡀
 ///       _                                                 ⢀⠊
 ///  0.75 _                                               ⢀⠔⠁
@@ -117,6 +121,7 @@ pub fn quartic(t: Float) -> Float {
 /// Eases in quintically.
 ///
 /// ```ansi
+///
 ///     1 _ __________________________________________________⡀
 ///       _                                                  ⠔
 ///  0.75 _                                                ⠠⠊
@@ -140,6 +145,7 @@ pub fn quintic(t: Float) -> Float {
 /// Eases in with a sine function.
 ///
 /// ```ansi
+///
 ///     1 _ __________________________________________________⡀
 ///       _                                               ⣀⠤⠒⠉
 ///  0.75 _                                          ⢀⡠⠔⠒⠉
@@ -165,6 +171,7 @@ pub fn sine(t: Float) -> Float {
 /// Eases in exponentially.
 ///
 /// ```ansi
+///
 ///     1 _ __________________________________________________⡀
 ///       _                                                  ⡐
 ///  0.75 _                                                 ⡐
@@ -194,6 +201,7 @@ pub fn exponential(t: Float) -> Float {
 /// Eases in on an elliptic arc.
 ///
 /// ```ansi
+///
 ///     1 _ __________________________________________________⡀
 ///       _
 ///  0.75 _                                                 ⢀⠊
@@ -229,6 +237,7 @@ pub fn back(t: Float) -> Float {
 /// Eases by oscillating with increasing amplitude around the start.
 ///
 /// ```ansi
+///
 ///     1 _ __________________________________________________⡀
 ///       _                                                  ⠠
 ///  0.75 _                                                  ⠄
@@ -261,6 +270,7 @@ pub fn elastic(t: Float) -> Float {
 /// Eases in by "bouncing" around the start.
 ///
 /// ```ansi
+///
 ///     1 _ ________________________________________________⣀⣀⡀
 ///       _                                            ⢀⠤⠒⠊⠉
 ///  0.75 _                                          ⡠⠊⠁
@@ -307,6 +317,7 @@ pub fn bounce(t: Float) -> Float {
 /// Eases in like a spring around the start.
 ///
 /// ```ansi
+///
 ///     1 _ __________________________________________________⡀
 ///       _                                                 ⡠⠊
 ///  0.75 _                                               ⡠⠊
@@ -344,6 +355,7 @@ pub fn spring(t: Float) -> Float {
 /// Output functions graph:
 ///
 /// ```ansi
+///
 ///     1 _ ________________________________⢀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⡀
 ///       _                    ⢀⣀⡠⠤⠤⠒⠒⠒⠉⠉⠉⠉⠉⠁
 ///  0.75 _               ⢀⡠⠔⠒⠉⠁
@@ -374,6 +386,7 @@ pub fn reverse(ease: Ease) -> Ease {
 /// Output functions graph:
 ///
 /// ```ansi
+///
 ///     1 _ _______________________________________⢀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⡀
 ///       _                                 ⣀⠤⠔⠒⠊⠉⠉⠁
 ///  0.75 _                              ⡠⠔⠉
@@ -395,6 +408,7 @@ pub fn reverse(ease: Ease) -> Ease {
 /// Output functions graph:
 ///
 /// ```ansi
+///
 ///     1 _ __________________________________________________⡀
 ///       _                                                 ⢀⠊
 ///  0.75 _                                               ⡠⠒⠁
@@ -424,6 +438,7 @@ pub fn symmetry(ease: Ease) -> Ease {
 /// Output functions graph:
 ///
 /// ```ansi
+///
 ///                                    ⢀⠒⢄
 ///     1 _ ___________________________⠄__⢂___⣀⠤⠤⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⡀
 ///       _                           ⠠    ⠑⠒⠊
@@ -454,6 +469,7 @@ pub fn join(ease_start: Ease, ease_end: Ease) -> Ease {
 /// Output functions graph:
 ///
 /// ```ansi
+///
 ///     1 _ __________________________⡀____________⢀⡀_____⣀⣀⣀⣀⡀
 ///       _                          ⡐⠈⠑⠤⣀      ⢀⡠⠔⠁⠈⠉⠉⠉⠉⠉
 ///  0.75 _                        ⢀⠌     ⠉⠒⠒⠒⠒⠉⠁
